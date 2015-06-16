@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Notes Organizer</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li {% block nav-main %}{% endblock %} ><a href="{% url 'index' %}">Main</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Profile<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><p class="navbar-text">Signed in as <strong>{{ user.username }}</strong></p></li>
+                                    <li class="divider"></li>
+                                    <li><a href="">Settings</a></li>
+                                    <li><a href="">Log Out</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li {% block nav-registration %}{% endblock %}><a href="{% url 'register' %}" >Sign Up</a></li>
+                            <li {% block nav-login %}{% endblock %}><a href="{% url 'login' %}" >Sign In</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+        {% block content %}{% endblock %}
+        </div>
+        <footer>
+            <section class="up-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>About App</h2>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam id mollis justo.
+                                Proin scelerisque elit a egestas congue. Aenean mollis est lorem, non tincidunt eros accumsan id. Donec vehicula sem id augue vulputate vehicula. Suspendisse nisl odio,
+                                sagittis eu volutpat nec, gravida vel ligula. Nullam non arcu eu augue mollis tincidunt sit amet eu est.
+                                Vivamus maximus pharetra tortor eget elementum. Sed sed purus nec lectus molestie feugiat vel sodales felis.
+                                Quisque dapibus, odio nec vestibulum facilisis, leo neque condimentum neque, at tristique arcu tortor quis velit. </p>
+
+                        </div>
+                        <div class="col-md-6">
+                            <h2>Additional information</h2>
+                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam id mollis justo.
+                                Proin scelerisque elit a egestas congue. Aenean mollis est lorem, non tincidunt eros accumsan id. Donec vehicula sem id augue vulputate vehicula. Suspendisse nisl odio,
+                                sagittis eu volutpat nec, gravida vel ligula. Nullam non arcu eu augue mollis tincidunt sit amet eu est.
+                                Vivamus maximus pharetra tortor eget elementum. Sed sed purus nec lectus molestie feugiat vel sodales felis.
+                                Quisque dapibus, odio nec vestibulum facilisis, leo neque condimentum neque, at tristique arcu tortor quis velit. </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    </body>
+</html>
