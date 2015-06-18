@@ -35,9 +35,7 @@ class Note(models.Model):
 
     class Meta:
         permissions = (
-            ("view_notes", "Can see available notes"),
-            ("change_notes", "Can change the status of notes"),
-            ("delete_notes", "Can remove a note"),
+            ("view_notes", "Anyone can see my notes"),
         )
 
     def __unicode__(self):
