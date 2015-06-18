@@ -1,11 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from notes.config import DEFAULT_COLORS
 
 
 # Create your models here.
 class Color(models.Model):
-    color = models.CharField(max_length=6, default=DEFAULT_COLORS)
+    color = models.CharField(max_length=6)
 
     def __unicode__(self):
         return self.color
@@ -25,25 +24,21 @@ class Category(models.Model):
         return self.category
 
 
-class UserSetting(models.Model):
-    user = models.OneToOneField(User)
-    color = models.ManyToManyField(Color, blank=True, default=DEFAULT_COLORS)
-    tag = models.ManyToManyField(Tag, blank=True)
-    category = models.ManyToManyField(Category, blank=True)
-
-    def __unicode__(self):
-        return self.user__username
-
-
 class Note(models.Model):
     user = models.ForeignKey(User)
     title = models.CharField(max_length=40)
     text = models.TextField()
     media = models.FileField(blank=True)
-    permission = models.BooleanField(default=True)
     color = models.OneToOneField(Color)
     tag = models.ManyToManyField(Tag, blank=True)
     category = models.ManyToManyField(Category)
+
+    class Meta:
+        permissions = (
+            ("view_notes", "Can see available notes"),
+            ("change_notes", "Can change the status of notes"),
+            ("delete_notes", "Can remove a note"),
+        )
 
     def __unicode__(self):
         return '{0} - {1}'.format(self.user__username, self.title)
