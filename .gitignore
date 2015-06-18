@@ -6,6 +6,7 @@ __pycache__/
 *.so
 
 .idea/
+*.sqlite3
 
 # Distribution / packaging
 .Python
