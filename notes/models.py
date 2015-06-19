@@ -29,7 +29,7 @@ class Note(models.Model):
     title = models.CharField(max_length=40)
     text = models.TextField()
     media = models.FileField(blank=True, null=True)
-    color = models.OneToOneField(Color)
+    color = models.ForeignKey(Color)
     tag = models.ManyToManyField(Tag, blank=True)
     category = models.ManyToManyField(Category)
 
