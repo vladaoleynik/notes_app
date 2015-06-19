@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Color(models.Model):
-    color = models.CharField(max_length=6)
+    color = models.CharField(max_length=6, default='000000')
 
     def __unicode__(self):
         return self.color
@@ -39,4 +39,4 @@ class Note(models.Model):
         )
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.user__username, self.title)
+        return '{0} - {1}'.format(self.user.username, self.title)
