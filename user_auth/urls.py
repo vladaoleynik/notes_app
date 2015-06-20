@@ -6,4 +6,5 @@ import views
 urlpatterns = [
     url(r'^logout/$', views.LogOutView.as_view(), name='logout'),
     url(r'^signin/$', views.SignInFormView.as_view(), name='signin'),
+    url(r'^signup/$', views.SignUpFormView.as_view(), name='signup'),
 ]

@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.views.generic.edit import FormView, View
+from user_auth.forms import SignUpForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render_to_response
+from django.template.context_processors import csrf
 
 
 # Create your views here.
@@ -25,4 +28,30 @@ class SignInFormView(FormView):
         user = form.get_user()
         login(self.request, user)
         return super(SignInFormView, self).form_valid(form)
+
+
+class SignUpFormView(FormView):
+    template_name = 'user_auth/signup.html'
+    form_class = SignUpForm
+    success_url = '/'
+
+    def post(self, request, *args, **kwargs):
+        return super(SignUpFormView, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.object = form.send_email()
+        username = form.cleaned_data['user']
+        password = form.cleaned_data['password1']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(self.request, user)
+                return HttpResponseRedirect('/')
+            else:
+                # Return a 'disabled account' error message
+                return HttpResponseRedirect('/auth/signup')
+        else:
+            # Return an 'invalid login' error message.
+            return HttpResponseRedirect('/auth/signup')
+        return super(SignUpFormView, self).form_valid(form)
 
