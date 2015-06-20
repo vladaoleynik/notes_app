@@ -1,20 +1,18 @@
-from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, \
-    ListCreateAPIView, RetrieveDestroyAPIView
+from rest_framework import generics
 from rest_data.serializers import NoteSerializer, CategorySerializer, TagSerializer, \
-    UserSerializer
-from notes.models import Note, Category, Tag, SYSTEM_COLORS
+    UserSerializer, ColorSerializer, SettingsSerializer
+from notes.models import Note, Category, Tag, Color, UserSettings
 from django.contrib.auth.models import User
 from rest_framework import permissions
-from rest_framework.response import Response
-
+import json
+from django.core import serializers
 
 """
 Notes api. Full notes list and note add.
 """
 
 
-class NoteListApi(ListCreateAPIView):
+class NoteListApi(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = NoteSerializer
 
@@ -27,12 +25,13 @@ Getting notes by author.
 """
 
 
-class AuthorNoteListApi(ListAPIView):
+class AuthorNoteListApi(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = NoteSerializer
 
     def get_queryset(self):
-        queryset = Note.objects.filter(user__username=self.kwargs.get('username'))
+        username = self.kwargs.get('username')
+        queryset = Note.objects.filter(user__username=username)
         return queryset
 
 """
@@ -40,12 +39,13 @@ Getting, delete and edit note by id.
 """
 
 
-class NoteApi(RetrieveUpdateDestroyAPIView):
+class NoteApi(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = NoteSerializer
 
     def get_queryset(self):
-        queryset = Note.objects.filter(pk=self.kwargs.get('pk'))
+        pk = self.kwargs.get('pk')
+        queryset = Note.objects.filter(pk=pk)
         return queryset
 
 """
@@ -53,12 +53,13 @@ Getting list of notes by category.
 """
 
 
-class NoteCategoryListApi(ListAPIView):
+class NoteCategoryListApi(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = NoteSerializer
 
     def get_queryset(self):
-        queryset = Note.objects.filter(category__category__icontains=self.kwargs.get('category'))
+        category = self.kwargs.get('category')
+        queryset = Note.objects.filter(category__category__icontains=category)
         return queryset
 
 """
@@ -66,12 +67,13 @@ Getting list of notes by tag.
 """
 
 
-class NoteTagListApi(ListAPIView):
+class NoteTagListApi(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = NoteSerializer
 
     def get_queryset(self):
-        queryset = Note.objects.filter(tag__tag__icontains=self.kwargs.get('tag'))
+        tag = self.kwargs.get('tag')
+        queryset = Note.objects.filter(tag__tag__icontains=tag)
         return queryset
 
 """
@@ -79,7 +81,7 @@ Categories api. Full category list and add.
 """
 
 
-class CategoryListApi(ListCreateAPIView):
+class CategoryListApi(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = CategorySerializer
 
@@ -87,25 +89,13 @@ class CategoryListApi(ListCreateAPIView):
         queryset = Category.objects.all()
         return queryset
 
-"""
-Categories get and delete.
-"""
-
-
-class CategoryDeleteApi(RetrieveDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = CategorySerializer
-
-    def get_queryset(self):
-        queryset = Category.objects.all()
-        return queryset
 
 """
 Tags api. Full tag list and add.
 """
 
 
-class TagListApi(ListCreateAPIView):
+class TagListApi(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     serializer_class = TagSerializer
 
@@ -113,36 +103,26 @@ class TagListApi(ListCreateAPIView):
         queryset = Tag.objects.all()
         return queryset
 
-"""
-Tags get and delete.
-"""
-
-
-class TagDeleteApi(RetrieveDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    serializer_class = TagSerializer
-
-    def get_queryset(self):
-        queryset = Tag.objects.all()
-        return queryset
 
 """
 Colors api. Full color list.
 """
 
 
-class ColorListApi(APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+class ColorListApi(generics.ListCreateAPIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = ColorSerializer
 
-    def get(self, request, *args, **kwargs):
-        return Response(SYSTEM_COLORS)
+    def get_queryset(self):
+        queryset = Color.objects.all()
+        return queryset
 
 """
 Add user
 """
 
 
-class UserApi(ListCreateAPIView):
+class UserApi(generics.ListCreateAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = UserSerializer
 
@@ -155,10 +135,25 @@ Delete user
 """
 
 
-class UserDeleteApi(RetrieveDestroyAPIView):
+class UserDeleteApi(generics.RetrieveDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserSerializer
 
     def get_queryset(self):
         queryset = User.objects.all()
+        return queryset
+
+"""
+UserSettings
+"""
+
+
+class UserSettingsListApi(generics.RetrieveUpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = SettingsSerializer
+    lookup_field = 'user'
+
+    def get_queryset(self):
+        username = self.kwargs.get(self.lookup_field)
+        queryset = UserSettings.objects.get(user__username=username)
         return queryset
