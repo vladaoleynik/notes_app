@@ -18,7 +18,9 @@
                     <ul class="list-group">
                         {% if user.is_authenticated %}
                             <li class="list-group-item">Signed in as <strong>{{ user }}</strong></li>
-                            <a href="#" class="list-group-item active">
+                            <a href="{% url 'index' %}" class="list-group-item">Main</a>
+                            <a href="#" class="list-group-item">Add Note</a>
+                            <a href="#" class="list-group-item">
                                 My Notes
                                 <span class="badge">14</span>
                             </a>
@@ -27,8 +29,9 @@
                             <a href="#" class="list-group-item">My Colors</a>
                             <a href="{% url 'logout' %}" class="list-group-item">Log Out</a>
                         {% else %}
-                            <a href="{% url 'signin' %}" class="list-group-item active">Sign In</a>
-                            <a href="#" class="list-group-item">Sign Up</a>
+                            <a href="{% url 'index' %}" class="list-group-item {% block nav-main %}{% endblock %}">Main</a>
+                            <a href="{% url 'signin' %}" class="list-group-item {% block nav-signin %}{% endblock %}">Sign In</a>
+                            <a href="{% url 'signup' %}" class="list-group-item {% block nav-signup %}{% endblock %}">Sign Up</a>
                         {% endif %}
                     </ul>
                 </div>

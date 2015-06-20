@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% block nav-signup %}active{% endblock %}
 {% block content %}
         {% if user.is_authenticated %}
             <h1>Greetings!</h1>
