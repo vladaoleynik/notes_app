@@ -1,8 +1,29 @@
 __author__ = 'vladaoleynik'
 
 import requests
+from models import Note
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 BASE_URL = 'http://localhost:8000'
+
+
+def pagination(request, data, per_page=4):
+    paginator = Paginator(data, per_page)  # Show 4 notes per page
+
+    page = request.GET.get('page')
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        data = paginator.page(paginator.num_pages)
+    return data
+
+
+def get_notes_count(user):
+    return Note.objects.filter(user__username=user).count()
 
 
 def rest_api_get_data(url):
