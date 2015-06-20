@@ -2,12 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# Create your models here.
-class Color(models.Model):
-    color = models.CharField(max_length=6, default='000000')
-
-    def __unicode__(self):
-        return self.color
+SYSTEM_COLORS = {
+    '0000ff',
+    '00ff00',
+    'ff0000'
+}
 
 
 class Tag(models.Model):
@@ -29,7 +28,7 @@ class Note(models.Model):
     title = models.CharField(max_length=40)
     text = models.TextField()
     media = models.FileField(blank=True, null=True)
-    color = models.ForeignKey(Color)
+    color = models.CharField(max_length=6, blank=True)
     tag = models.ManyToManyField(Tag, blank=True)
     category = models.ManyToManyField(Category)
 
