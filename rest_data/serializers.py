@@ -22,7 +22,7 @@ class NoteSerializer(serializers.ModelSerializer):
         return [unicode(tag) for tag in note.tag.all()]
 
     def get_category(self, note):
-        return [unicode(cat) for cat in note.category.all()]
+        return note.category.category
 
     def create(self, validated_data):
         username = self.initial_data.get('user')
@@ -30,27 +30,22 @@ class NoteSerializer(serializers.ModelSerializer):
         tg = self.initial_data.get('tag')
 
         user = User.objects.get(username=username)
-        categories = [
-            cat for cat in Category.objects.filter(category__in=cat)
-        ]
+        category = Category.objects.get(category=cat)
         tags = [
             tag for tag in Tag.objects.filter(tag__in=tg)
         ]
 
         note = Note.objects.create(
-            user=user, **validated_data
+            user=user, category=category, **validated_data
         )
         note.tag.add(*tags)
-        note.category.add(*categories)
 
         return note
 
     def update(self, instance, validated_data):
         instance.user = User.objects.get(username=self.initial_data.get('user'))
         instance.color = self.initial_data.get('color')
-        instance.category = [
-            cat for cat in Category.objects.filter(category__in=self.initial_data.get('category'))
-        ]
+        instance.category = Category.objects.get(category=self.initial_data.get('category'))
         instance.tag = [
             tag for tag in Tag.objects.filter(tag__in=self.initial_data.get('tag'))
         ]
