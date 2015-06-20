@@ -15,6 +15,7 @@ INSERT INTO "django_migrations" VALUES(11,'sessions','0001_initial','2015-06-20 
 INSERT INTO "django_migrations" VALUES(12,'notes','0002_auto_20150620_1627','2015-06-20 13:27:56.117969');
 INSERT INTO "django_migrations" VALUES(13,'notes','0003_color_status','2015-06-20 13:39:55.188875');
 INSERT INTO "django_migrations" VALUES(14,'notes','0004_auto_20150620_1642','2015-06-20 13:42:16.757865');
+INSERT INTO "django_migrations" VALUES(15,'notes','0005_auto_20150620_2302','2015-06-20 20:02:33.403708');
 CREATE TABLE "auth_group" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(80) NOT NULL UNIQUE);
 CREATE TABLE "auth_group_permissions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL REFERENCES "auth_group" ("id"), "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id"), UNIQUE ("group_id", "permission_id"));
 CREATE TABLE "auth_user_groups" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_id" integer NOT NULL REFERENCES "auth_user" ("id"), "group_id" integer NOT NULL REFERENCES "auth_group" ("id"), UNIQUE ("user_id", "group_id"));
@@ -121,7 +122,7 @@ CREATE TABLE "notes_usersettings_color" ("id" integer NOT NULL PRIMARY KEY AUTOI
 INSERT INTO "notes_usersettings_color" VALUES(2,1,4);
 CREATE TABLE "notes_usersettings_tag" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "usersettings_id" integer NOT NULL REFERENCES "notes_usersettings" ("id"), "tag_id" integer NOT NULL REFERENCES "notes_tag" ("id"), UNIQUE ("usersettings_id", "tag_id"));
 DELETE FROM sqlite_sequence;
-INSERT INTO "sqlite_sequence" VALUES('django_migrations',14);
+INSERT INTO "sqlite_sequence" VALUES('django_migrations',15);
 INSERT INTO "sqlite_sequence" VALUES('django_content_type',11);
 INSERT INTO "sqlite_sequence" VALUES('auth_permission',34);
 INSERT INTO "sqlite_sequence" VALUES('auth_user',3);
@@ -131,10 +132,10 @@ INSERT INTO "sqlite_sequence" VALUES('django_admin_log',13);
 INSERT INTO "sqlite_sequence" VALUES('notes_tag',2);
 INSERT INTO "sqlite_sequence" VALUES('notes_note_tag',10);
 INSERT INTO "sqlite_sequence" VALUES('notes_color',6);
+INSERT INTO "sqlite_sequence" VALUES('notes_usersettings',3);
 INSERT INTO "sqlite_sequence" VALUES('notes_usersettings_category',0);
 INSERT INTO "sqlite_sequence" VALUES('notes_usersettings_color',2);
 INSERT INTO "sqlite_sequence" VALUES('notes_usersettings_tag',0);
-INSERT INTO "sqlite_sequence" VALUES('notes_usersettings',3);
 CREATE INDEX "auth_group_permissions_0e939a4f" ON "auth_group_permissions" ("group_id");
 CREATE INDEX "auth_group_permissions_8373b171" ON "auth_group_permissions" ("permission_id");
 CREATE INDEX "auth_user_groups_e8701ad4" ON "auth_user_groups" ("user_id");
