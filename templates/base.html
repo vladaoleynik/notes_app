@@ -21,9 +21,9 @@
                             <li class="list-group-item">Signed in as <strong>{{ user }}</strong></li>
                             <a href="{% url 'index' %}" class="list-group-item {% nav_active request 'index' %}">Main</a>
                             <a href="#" class="list-group-item">Add Note</a>
-                            <a href="#" class="list-group-item">
+                            <a href="{% url 'my_notes' %}" class="list-group-item {% nav_active request 'my_notes' %}">
                                 My Notes
-                                <span class="badge">14</span>
+                                <span class="badge">{{ notes_count }}</span>
                             </a>
                             <a href="#" class="list-group-item">My Categories</a>
                             <a href="#" class="list-group-item">My Tags</a>
