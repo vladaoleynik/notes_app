@@ -1,13 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, \
     ListCreateAPIView, RetrieveDestroyAPIView
-from rest_data.serializers import NoteSerializer, ColorSerializer, CategorySerializer, TagSerializer
-from notes.models import Note, Color, Category, Tag
+from rest_data.serializers import NoteSerializer, CategorySerializer, TagSerializer, \
+    UserSerializer
+from notes.models import Note, Category, Tag, SYSTEM_COLORS
+from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.response import Response
 
 
-# Create your views here.
 """
 Notes api. Full notes list and note add.
 """
@@ -125,11 +126,39 @@ class TagDeleteApi(RetrieveDestroyAPIView):
         queryset = Tag.objects.all()
         return queryset
 
+"""
+Colors api. Full color list.
+"""
+
 
 class ColorListApi(APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get(self, request, *args, **kwargs):
-        queryset = Color.objects.all()
-        res = ColorSerializer(queryset, many=True)
-        return Response(res.data)
+        return Response(SYSTEM_COLORS)
+
+"""
+Add user
+"""
+
+
+class UserApi(ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        return queryset
+
+"""
+Delete user
+"""
+
+
+class UserDeleteApi(RetrieveDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        return queryset

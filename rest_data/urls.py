@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^categories/$', views.CategoryListApi.as_view()),
     url(r'^categories/(?P<pk>\d+)/delete/$', views.CategoryDeleteApi.as_view()),
     url(r'^colors/$', views.ColorListApi.as_view()),
+    url(r'^user/$', views.UserApi.as_view()),
+    url(r'^user/(?P<pk>\d+)/delete/$', views.UserDeleteApi.as_view()),
 ]
-

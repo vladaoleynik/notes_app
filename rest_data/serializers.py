@@ -1,6 +1,6 @@
 __author__ = 'vladaoleynik'
 
-from notes.models import Note, Tag, Category, Color
+from notes.models import Note, Tag, Category
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -8,7 +8,6 @@ from rest_framework import serializers
 class NoteSerializer(serializers.ModelSerializer):
 
     user = serializers.SerializerMethodField()
-    color = serializers.SerializerMethodField()
     tag = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
 
@@ -19,9 +18,6 @@ class NoteSerializer(serializers.ModelSerializer):
     def get_user(self, note):
         return note.user.username
 
-    def get_color(self, note):
-        return note.color.color
-
     def get_tag(self, note):
         return [unicode(tag) for tag in note.tag.all()]
 
@@ -30,12 +26,10 @@ class NoteSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         username = self.initial_data.get('user')
-        clr = self.initial_data.get('color')
         cat = self.initial_data.get('category')
         tg = self.initial_data.get('tag')
 
         user = User.objects.get(username=username)
-        color = Color.objects.get(color=clr)
         categories = [
             cat for cat in Category.objects.filter(category__in=cat)
         ]
@@ -44,7 +38,7 @@ class NoteSerializer(serializers.ModelSerializer):
         ]
 
         note = Note.objects.create(
-            user=user, color=color, **validated_data
+            user=user, **validated_data
         )
         note.tag.add(*tags)
         note.category.add(*categories)
@@ -52,41 +46,36 @@ class NoteSerializer(serializers.ModelSerializer):
         return note
 
     def update(self, instance, validated_data):
-        username = self.initial_data.get('user')
-        clr = self.initial_data.get('color')
-        cat = self.initial_data.get('category')
-        tg = self.initial_data.get('tag')
-
-        instance.user = self.initial_data.get('user', User.objects.get(username=username))
-        instance.color = self.initial_data.get('color', Color.objects.get(color=clr))
-        instance.category = self.initial_data.get('category', [
-            cat for cat in Category.objects.filter(category__in=cat)
-        ])
-        instance.tag = self.initial_data.get('tag', [
-            tag for tag in Tag.objects.filter(tag__in=tg)
-        ])
+        instance.user = User.objects.get(username=self.initial_data.get('user'))
+        instance.color = self.initial_data.get('color')
+        instance.category = [
+            cat for cat in Category.objects.filter(category__in=self.initial_data.get('category'))
+        ]
+        instance.tag = [
+            tag for tag in Tag.objects.filter(tag__in=self.initial_data.get('tag'))
+        ]
 
         instance.save()
 
         return instance
 
 
-class ColorSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Color
-        fields = ['color']
-
-
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['category']
+        fields = ['pk', 'category']
 
 
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ['tag']
+        fields = ['pk', 'tag']
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['pk', 'username', 'password']
