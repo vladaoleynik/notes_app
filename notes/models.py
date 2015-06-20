@@ -26,9 +26,9 @@ class Category(models.Model):
 
 class UserSettings(models.Model):
     user = models.OneToOneField(User)
-    color = models.ManyToManyField(Color, blank=True, null=True)
-    tag = models.ManyToManyField(Tag, blank=True, null=True)
-    category = models.ManyToManyField(Category, blank=True, null=True)
+    color = models.ManyToManyField(Color, blank=True)
+    tag = models.ManyToManyField(Tag, blank=True)
+    category = models.ManyToManyField(Category, blank=True)
 
     def __unicode__(self):
         return self.user.username
