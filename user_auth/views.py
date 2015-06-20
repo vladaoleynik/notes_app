@@ -47,11 +47,5 @@ class SignUpFormView(FormView):
             if user.is_active:
                 login(self.request, user)
                 return HttpResponseRedirect('/')
-            else:
-                # Return a 'disabled account' error message
-                return HttpResponseRedirect('/auth/signup')
-        else:
-            # Return an 'invalid login' error message.
-            return HttpResponseRedirect('/auth/signup')
-        return super(SignUpFormView, self).form_valid(form)
+        return HttpResponseRedirect('/auth/signup')
 
