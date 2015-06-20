@@ -143,7 +143,7 @@ Add user
 
 
 class UserApi(ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.AllowAny,)
     serializer_class = UserSerializer
 
     def get_queryset(self):
@@ -156,7 +156,7 @@ Delete user
 
 
 class UserDeleteApi(RetrieveDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = UserSerializer
 
     def get_queryset(self):
