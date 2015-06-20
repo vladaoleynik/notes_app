@@ -30,7 +30,7 @@ class Note(models.Model):
     media = models.FileField(blank=True, null=True)
     color = models.CharField(max_length=6, blank=True)
     tag = models.ManyToManyField(Tag, blank=True)
-    category = models.ManyToManyField(Category)
+    category = models.ForeignKey(Category)
 
     class Meta:
         permissions = (

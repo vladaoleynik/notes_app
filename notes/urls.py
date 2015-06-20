@@ -4,5 +4,8 @@ from notes import views
 
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^notes/$', views.IndexView.as_view(), name='index'),
+    url(r'^author/(?P<username>\w+)/$', views.NotesAuthorView.as_view(), name='notes_author'),
+    url(r'^notes/category/(?P<category>\w+)/$', views.NotesCategoryView.as_view(), name='notes_category'),
+    url(r'^notes/tag/(?P<tag>\w+)/$', views.NotesTagView.as_view(), name='notes_tag'),
 ]
