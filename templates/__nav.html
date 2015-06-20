@@ -1,0 +1,20 @@
+{% load base_extras %}
+<ul class="list-group">
+    {% if user.is_authenticated %}
+        <li class="list-group-item">Signed in as <strong>{{ user }}</strong></li>
+        <a href="{% url 'index' %}" class="list-group-item {% nav_active request 'index' %}">Main</a>
+        <a href="#" class="list-group-item">Add Note</a>
+        <a href="{% url 'my_notes' %}" class="list-group-item {% nav_active request 'my_notes' %}">
+            My Notes
+            <span class="badge">{{ notes_count }}</span>
+        </a>
+        <a href="{% url 'my_categories' %}" class="list-group-item {% nav_active request 'my_categories' %}">My Categories</a>
+        <a href="{% url 'my_tags' %}" class="list-group-item {% nav_active request 'my_tags' %}">My Tags</a>
+        <a href="#" class="list-group-item">My Colors</a>
+        <a href="{% url 'logout' %}" class="list-group-item">Log Out</a>
+    {% else %}
+        <a href="{% url 'index' %}" class="list-group-item {% nav_active request 'index' %}">Main</a>
+        <a href="{% url 'signin' %}" class="list-group-item {% nav_active request 'signin' %}">Sign In</a>
+        <a href="{% url 'signup' %}" class="list-group-item {% nav_active request 'signup' %}">Sign Up</a>
+    {% endif %}
+</ul>

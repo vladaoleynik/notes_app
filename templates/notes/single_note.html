@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block nav-main %}active{% endblock %}
+{% block content %}
+    <div>
+        <figure>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #{{ note.color }}!important; background-image: none;">
+                    <div class="page-header" style="margin: 0; padding: 0; border: 0;">
+                        <h3>
+                            <a href="" style="color: #080808; text-decoration: none; font-weight: bold">{{ note.category }}:</a>
+                            <a href="" style="color:#000000; text-decoration: none;">{{ note.title }}</a>
+                            <a href="" style="text-decoration: none;"><small style="color: #222222;">{{ note.user }}</small></a>
+                        </h3>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <p>{{ note.text }}</p>
+                </div>
+                <div class="panel-footer panel-default">
+                    <p>
+                        {% for tag in note.tag %}
+                        <a href="{% url 'notes_tag' tag|lower %}">{{ tag }}</a>
+                        {% ifnotequal tag note.tag|last %},{% endifnotequal %}
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </figure>
+        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-success btn-md col-sm-12">Back</a>
+    </div>
+{% endblock %}
