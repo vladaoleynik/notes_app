@@ -91,6 +91,38 @@ class ColorSerializer(serializers.ModelSerializer):
 
 class SettingsSerializer(serializers.ModelSerializer):
 
+    user = serializers.SerializerMethodField()
+    tag = serializers.SerializerMethodField()
+    color = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+
     class Meta:
         model = UserSettings
         fields = ['user', 'color', 'category', 'tag']
+
+    def get_user(self, object):
+        return object.user.username
+
+    def get_tag(self, object):
+        return [unicode(tag) for tag in object.tag.all()]
+
+    def get_category(self, object):
+        return [unicode(category) for category in object.category.all()]
+
+    def get_color(self, object):
+        return [unicode(color) for color in object.color.all()]
+
+    def update(self, instance, validated_data):
+        instance.color = [
+            color for color in Color.objects.filter(color__in=self.initial_data.get('color'))
+        ]
+        instance.category = [
+            category for category in Category.objects.filter(category__in=self.initial_data.get('category'))
+        ]
+        instance.tag = [
+            tag for tag in Tag.objects.filter(tag__in=self.initial_data.get('tag'))
+        ]
+
+        instance.save()
+
+        return instance

@@ -153,7 +153,7 @@ class UserSettingsListApi(generics.RetrieveUpdateAPIView):
     serializer_class = SettingsSerializer
     lookup_field = 'user'
 
-    def get_queryset(self):
+    def get_object(self):
         username = self.kwargs.get(self.lookup_field)
-        queryset = UserSettings.objects.get(user__username=username)
-        return queryset
+        user = UserSettings.objects.get(user__username=username)
+        return user
