@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class Color(models.Model):
     color = models.CharField(max_length=6)
+    status = models.CharField(default='user', max_length=10)
 
     def __unicode__(self):
         return self.color
@@ -25,9 +26,9 @@ class Category(models.Model):
 
 class UserSettings(models.Model):
     user = models.OneToOneField(User)
-    color = models.ManyToManyField(Color)
-    tag = models.ManyToManyField(Tag)
-    category = models.ManyToManyField(Category)
+    color = models.ManyToManyField(Color, blank=True, null=True)
+    tag = models.ManyToManyField(Tag, blank=True, null=True)
+    category = models.ManyToManyField(Category, blank=True, null=True)
 
     def __unicode__(self):
         return self.user.username

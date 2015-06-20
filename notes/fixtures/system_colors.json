@@ -3,21 +3,24 @@
     "model": "notes.color",
     "pk": 1,
     "fields": {
-      "color": "F0CE99"
+      "color": "F0CE99",
+      "status": "system"
     }
   },
   {
     "model": "notes.color",
     "pk": 2,
     "fields": {
-      "color": "AEF099"
+      "color": "AEF099",
+      "status": "system"
     }
   },
   {
     "model": "notes.color",
     "pk": 3,
     "fields": {
-      "color": "99BEF0"
+      "color": "99BEF0",
+      "status": "system"
     }
   }
 ]
