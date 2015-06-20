@@ -55,3 +55,12 @@ class NotesTagView(TemplateView):
         notes = actions.pagination(request, notes)
         info = "Notes by tag: " + tag
         return render(request, self.template_name, {'notes': notes, 'info': info})
+
+
+class NoteView(TemplateView):
+    template_name = 'notes/index.html'
+
+    def get(self, request, *args, **kwargs):
+        pk = self.kwargs.get('pk')
+        notes = actions.get_note(pk)
+        return render(request, self.template_name, {'notes': notes})
