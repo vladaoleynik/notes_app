@@ -5,3 +5,5 @@ from notes import models
 admin.site.register(models.Tag)
 admin.site.register(models.Note)
 admin.site.register(models.Category)
+admin.site.register(models.Color)
+admin.site.register(models.UserSettings)

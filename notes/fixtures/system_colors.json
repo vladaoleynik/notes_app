@@ -1,0 +1,23 @@
+[
+  {
+    "model": "notes.color",
+    "pk": 1,
+    "fields": {
+      "color": "F0CE99"
+    }
+  },
+  {
+    "model": "notes.color",
+    "pk": 2,
+    "fields": {
+      "color": "AEF099"
+    }
+  },
+  {
+    "model": "notes.color",
+    "pk": 3,
+    "fields": {
+      "color": "99BEF0"
+    }
+  }
+]
