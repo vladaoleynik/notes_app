@@ -5,6 +5,7 @@ from models import Note
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 BASE_URL = 'http://localhost:8000'
+AUTH = ('vladaoleynik', '123')
 
 
 def pagination(request, data, per_page=4):
@@ -26,15 +27,15 @@ def get_notes_count(user):
     return Note.objects.filter(user__username=user).count()
 
 
-def rest_get_data_list(url):
-    r = requests.get(url=url)
+def rest_get_data_list(url, auth=None):
+    r = requests.get(url=url, auth=auth)
     data = r.json()
     data.reverse()
     return data
 
 
-def rest_get_data(url):
-    r = requests.get(url=url)
+def rest_get_data(url, auth=None):
+    r = requests.get(url=url, auth=auth)
     data = r.json()
     return data
 
@@ -62,3 +63,8 @@ def get_tag_notes(tag):
 def get_note(pk):
     url = BASE_URL + '/api/notes/' + pk
     return rest_get_data(url)
+
+
+def get_my_settings(user):
+    url = BASE_URL + '/api/user/' + user + '/settings/'
+    return rest_get_data(url, auth=AUTH)
