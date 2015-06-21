@@ -4,26 +4,26 @@ from django.contrib.auth.models import User
 
 class Color(models.Model):
     color = models.CharField(max_length=6)
-    status = models.CharField(default='user', max_length=10)
+    status = models.IntegerField(default='0')
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.color, self.status)
+        return self.color
 
 
 class Tag(models.Model):
     tag = models.CharField(max_length=40)
-    status = models.CharField(default='user', max_length=10)
+    status = models.IntegerField(default='0')
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.tag, self.status)
+        return self.tag
 
 
 class Category(models.Model):
     category = models.CharField(max_length=40)
-    status = models.CharField(default='user', max_length=10)
+    status = models.IntegerField(default='0')
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.category, self.status)
+        return self.category
 
 
 class UserSettings(models.Model):

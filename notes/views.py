@@ -1,7 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
+from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect
 import actions
 import mixins
+from forms import SettingForm
 
 
 # Create your views here.
@@ -38,8 +41,66 @@ class MyCategoriesView(mixins.NavigationMixin, TemplateView):
         context = super(MyCategoriesView, self).get_context_data(**kwargs)
 
         settings = actions.get_my_settings(str(self.request.user))
-        context['settings'] = settings
-        print context
+        context['settings'] = settings['category']
+        context['info'] = "No custom categories yet."
+        return context
+
+    def post(self, *args, **kwargs):
+        print kwargs
+
+
+class MyTagsView(mixins.NavigationMixin, FormView):
+    template_name = 'notes/my_tags.html'
+    form_class = SettingForm
+    url = reverse_lazy('my_tags')
+    success_url = url
+
+    def get_context_data(self, **kwargs):
+        context = super(MyTagsView, self).get_context_data(**kwargs)
+        system = actions.get_system_tags()
+        custom = actions.get_my_tags(str(self.request.user))
+        context['system'] = system
+        context['custom'] = custom
+        context['set'] = "tag"
+        return context
+
+    def form_valid(self, form):
+        setting = form.cleaned_data['setting']
+        self.object = form.send_setting(str(self.request.user), setting, "tag")
+        return super(MyTagsView, self).form_valid(form)
+
+
+class MyCategoriesView(mixins.NavigationMixin, FormView):
+    template_name = 'notes/my_categories.html'
+    form_class = SettingForm
+    url = reverse_lazy('my_categories')
+    success_url = url
+
+    def get_context_data(self, **kwargs):
+        context = super(MyCategoriesView, self).get_context_data(**kwargs)
+        system = actions.get_system_categories()
+        custom = actions.get_my_categories(str(self.request.user))
+        context['system'] = system
+        context['custom'] = custom
+        context['set'] = "category"
+        return context
+
+    def form_valid(self, form):
+        setting = form.cleaned_data['setting']
+        self.object = form.send_setting(str(self.request.user), setting, "category")
+        return super(MyCategoriesView, self).form_valid(form)
+
+
+class MyColorsView(mixins.NavigationMixin, TemplateView):
+    template_name = 'notes/colors.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MyColorsView, self).get_context_data(**kwargs)
+
+        settings = actions.get_my_settings(str(self.request.user))
+        context['settings'] = settings['tag']
+        print context['settings']
+        context['info'] = "No custom tags yet."
         return context
 
 

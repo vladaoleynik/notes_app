@@ -2,6 +2,7 @@ __author__ = 'vladaoleynik'
 
 import requests
 from models import Note
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 BASE_URL = 'http://localhost:8000'
@@ -40,6 +41,11 @@ def rest_get_data(url, auth=None):
     return data
 
 
+def rest_post_data(url, clear_data, auth=None):
+    r = requests.post(url=url, json=clear_data, auth=auth)
+    return r
+
+
 def get_notes_list():
     url = BASE_URL + '/api/notes/'
     return rest_get_data_list(url)
@@ -65,6 +71,36 @@ def get_note(pk):
     return rest_get_data(url)
 
 
-def get_my_settings(user):
-    url = BASE_URL + '/api/user/' + user + '/settings/'
-    return rest_get_data(url, auth=AUTH)
+def get_my_tags(user):
+    url = BASE_URL + '/api/user/' + user + '/tag/'
+    return rest_get_data_list(url, auth=AUTH)
+
+
+def get_system_tags():
+    url = BASE_URL + '/api/tag/'
+    return rest_get_data_list(url, auth=AUTH)
+
+
+def get_my_categories(user):
+    url = BASE_URL + '/api/user/' + user + '/category/'
+    return rest_get_data_list(url, auth=AUTH)
+
+
+def get_system_categories():
+    url = BASE_URL + '/api/category/'
+    return rest_get_data_list(url, auth=AUTH)
+
+
+def get_user_id(user):
+    user_id = User.objects.values('pk').get(username=user)
+    return user_id['pk']
+
+
+def post_my_settings(user, clear_data, setting):
+    url = BASE_URL + '/api/user/' + user + '/' + setting + '/'
+    status = get_user_id(user)
+    data = {
+        setting: clear_data,
+        "status": status
+    }
+    return rest_post_data(url, data, auth=AUTH)
