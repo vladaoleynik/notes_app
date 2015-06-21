@@ -3,7 +3,7 @@
     {% if user.is_authenticated %}
         <li class="list-group-item">Signed in as <strong>{{ user }}</strong></li>
         <a href="{% url 'index' %}" class="list-group-item {% nav_active request 'index' %}">Main</a>
-        <a href="#" class="list-group-item">Add Note</a>
+        <a href="{% url 'new_note' %}" class="list-group-item {% nav_active request 'new_note' %}">Add Note</a>
         <a href="{% url 'my_notes' %}" class="list-group-item {% nav_active request 'my_notes' %}">
             My Notes
             <span class="badge">{{ notes_count }}</span>
