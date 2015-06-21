@@ -23,7 +23,7 @@ user_urls = [
 urlpatterns = [
     url(r'^notes/', include(notes_urls)),
     url(r'^category/$', views.CategoryListApi.as_view()),
-    url(r'^colors/$', views.ColorListApi.as_view()),
+    url(r'^color/$', views.ColorListApi.as_view()),
     url(r'^tag/$', views.TagListApi.as_view()),
     url(r'^user/', include(user_urls))
 ]
