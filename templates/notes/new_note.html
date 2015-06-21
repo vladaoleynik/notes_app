@@ -24,8 +24,8 @@
                         <p class="col-sm-2 control-label">{{ form.color.label_tag }}</p>
                         <p class="col-sm-5">
                             <select name="color">
-                                {% for choice in color_choice %}
-                                    <option value="{{ choice.0 }}" style="background-color: #{{ choice.1 }};">{{ choice.1 }}</option>
+                                {% for value, choice in form.fields.color.choices %}
+                                    <option value="{{ value }}" style="background-color: #{{ choice }};">{{ choice }}</option>
                                 {% endfor %}
                             </select>
                         </p>
@@ -37,7 +37,34 @@
 
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group">
+                        <p class="col-sm-2 control-label">{{ form.tag.label_tag }}</p>
+                        <p class="col-sm-5">
+                            {{ form.tag }}
+                        </p>
+                        <p class="col-sm-5">
+                            {% for err in form.tag.errors %}
+                                <span class="text-danger">{{ err }}</span>
+                            {% endfor %}
+                        </p>
 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <p class="col-sm-2 control-label">{{ form.category.label_tag }}</p>
+                        <p class="col-sm-5">
+                            {{ form.category }}
+                        </p>
+                        <p class="col-sm-5">
+                            {% for err in form.category.errors %}
+                                <span class="text-danger">{{ err }}</span>
+                            {% endfor %}
+                        </p>
+
+                    </div>
+                </div>
             <input class="btn btn-success btn-md col-sm-12" type="submit" value="Send"/>
         </form>
     </div>
