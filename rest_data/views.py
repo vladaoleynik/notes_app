@@ -103,6 +103,19 @@ class UserCategoriesListApi(generics.ListCreateAPIView):
         return user
 
 
+class UserColorsListApi(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ColorSerializer
+    lookup_field = 'user'
+
+    def get_queryset(self):
+        username = self.kwargs.get(self.lookup_field)
+        status = User.objects.values('pk').get(username=username)
+        status = status['pk']
+        user = Color.objects.filter(status=status)
+        return user
+
+
 """
 Tags api. Full tag list and add.
 """

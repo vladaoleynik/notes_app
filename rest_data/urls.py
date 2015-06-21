@@ -15,7 +15,8 @@ user_urls = [
     url(r'^$', views.UserApi.as_view()),
     url(r'^(?P<pk>\d+)/delete/$', views.UserDeleteApi.as_view()),
     url(r'^(?P<user>\w+)/tag/$', views.UserTagsListApi.as_view()),
-    url(r'^(?P<user>\w+)/category/$', views.UserCategoriesListApi.as_view())
+    url(r'^(?P<user>\w+)/category/$', views.UserCategoriesListApi.as_view()),
+    url(r'^(?P<user>\w+)/color/$', views.UserColorsListApi.as_view())
 ]
 
 
