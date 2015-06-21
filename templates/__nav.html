@@ -10,7 +10,7 @@
         </a>
         <a href="{% url 'my_categories' %}" class="list-group-item {% nav_active request 'my_categories' %}">My Categories</a>
         <a href="{% url 'my_tags' %}" class="list-group-item {% nav_active request 'my_tags' %}">My Tags</a>
-        <a href="#" class="list-group-item">My Colors</a>
+        <a href="{% url 'my_colors' %}" class="list-group-item {% nav_active request 'my_colors' %}">My Colors</a>
         <a href="{% url 'logout' %}" class="list-group-item">Log Out</a>
     {% else %}
         <a href="{% url 'index' %}" class="list-group-item {% nav_active request 'index' %}">Main</a>
