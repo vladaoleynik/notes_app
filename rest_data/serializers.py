@@ -65,7 +65,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['pk', 'category']
+        fields = ['pk', 'category', 'status']
 
 
 class TagSerializer(serializers.ModelSerializer):

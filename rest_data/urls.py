@@ -14,14 +14,15 @@ notes_urls = [
 user_urls = [
     url(r'^$', views.UserApi.as_view()),
     url(r'^(?P<pk>\d+)/delete/$', views.UserDeleteApi.as_view()),
-    url(r'^(?P<user>\w+)/tags/$', views.UserTagsListApi.as_view())
+    url(r'^(?P<user>\w+)/tag/$', views.UserTagsListApi.as_view()),
+    url(r'^(?P<user>\w+)/category/$', views.UserCategoriesListApi.as_view())
 ]
 
 
 urlpatterns = [
     url(r'^notes/', include(notes_urls)),
-    url(r'^categories/$', views.CategoryListApi.as_view()),
+    url(r'^category/$', views.CategoryListApi.as_view()),
     url(r'^colors/$', views.ColorListApi.as_view()),
-    url(r'^tags/$', views.TagListApi.as_view()),
+    url(r'^tag/$', views.TagListApi.as_view()),
     url(r'^user/', include(user_urls))
 ]
