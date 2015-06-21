@@ -81,6 +81,26 @@ def get_system_tags():
     return rest_get_data_list(url, auth=AUTH)
 
 
+def get_my_colors(user):
+    url = BASE_URL + '/api/user/' + user + '/color/'
+    return rest_get_data_list(url, auth=AUTH)
+
+
+def get_system_colors():
+    url = BASE_URL + '/api/color/'
+    return rest_get_data_list(url, auth=AUTH)
+
+
+def post_my_color(user, clear_data):
+    url = BASE_URL + '/api/user/' + user + '/color/'
+    status = get_user_id(user)
+    data = {
+        "color": clear_data,
+        "status": status
+    }
+    return rest_post_data(url, data, auth=AUTH)
+
+
 def get_my_categories(user):
     url = BASE_URL + '/api/user/' + user + '/category/'
     return rest_get_data_list(url, auth=AUTH)

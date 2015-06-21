@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^profile/my_notes/$', views.MyNotesView.as_view(), name='my_notes'),
     url(r'^profile/my_categories/$', views.MyCategoriesView.as_view(), name='my_categories'),
     url(r'^profile/my_tags/$', views.MyTagsView.as_view(), name='my_tags'),
+    url(r'^profile/my_colors/$', views.MyColorsView.as_view(), name='my_colors'),
     url(r'^note/(?P<pk>\d+)/$', views.NoteView.as_view(), name='single_note'),
     url(r'^author/(?P<username>\w+)/$', views.NotesAuthorView.as_view(), name='notes_author'),
     url(r'^notes/category/(?P<category>\w+)/$', views.NotesCategoryView.as_view(), name='notes_category'),

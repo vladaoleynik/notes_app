@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 import actions
 import mixins
-from forms import SettingForm
+from forms import SettingForm, ColorForm
 
 
 # Create your views here.
@@ -91,17 +91,26 @@ class MyCategoriesView(mixins.NavigationMixin, FormView):
         return super(MyCategoriesView, self).form_valid(form)
 
 
-class MyColorsView(mixins.NavigationMixin, TemplateView):
-    template_name = 'notes/colors.html'
+class MyColorsView(mixins.NavigationMixin, FormView):
+    template_name = 'notes/my_colors.html'
+    form_class = ColorForm
+    url = reverse_lazy('my_colors')
+    success_url = url
 
     def get_context_data(self, **kwargs):
         context = super(MyColorsView, self).get_context_data(**kwargs)
-
-        settings = actions.get_my_settings(str(self.request.user))
-        context['settings'] = settings['tag']
-        print context['settings']
-        context['info'] = "No custom tags yet."
+        system = actions.get_system_colors()
+        custom = actions.get_my_colors(str(self.request.user))
+        context['system'] = system
+        context['custom'] = custom
         return context
+
+    def form_valid(self, form):
+        setting = form.cleaned_data['setting']
+        setting = setting.replace('#', '')
+        print setting
+        self.object = form.send_color(str(self.request.user), setting)
+        return super(MyColorsView, self).form_valid(form)
 
 
 class NotesAuthorView(mixins.NavigationMixin, TemplateView):
