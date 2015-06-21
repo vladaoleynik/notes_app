@@ -7,21 +7,23 @@ class Color(models.Model):
     status = models.CharField(default='user', max_length=10)
 
     def __unicode__(self):
-        return self.color
+        return '{0} - {1}'.format(self.color, self.status)
 
 
 class Tag(models.Model):
     tag = models.CharField(max_length=40)
+    status = models.CharField(default='user', max_length=10)
 
     def __unicode__(self):
-        return self.tag
+        return '{0} - {1}'.format(self.tag, self.status)
 
 
 class Category(models.Model):
     category = models.CharField(max_length=40)
+    status = models.CharField(default='user', max_length=10)
 
     def __unicode__(self):
-        return self.category
+        return '{0} - {1}'.format(self.category, self.status)
 
 
 class UserSettings(models.Model):
