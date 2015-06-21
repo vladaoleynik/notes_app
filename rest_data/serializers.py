@@ -72,7 +72,7 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ['pk', 'tag']
+        fields = ['pk', 'tag', 'status']
 
 
 class UserSerializer(serializers.ModelSerializer):

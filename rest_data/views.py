@@ -86,7 +86,7 @@ class CategoryListApi(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        queryset = Category.objects.all()
+        queryset = Category.objects.filter(status=0)
         return queryset
 
 
@@ -100,8 +100,21 @@ class TagListApi(generics.ListCreateAPIView):
     serializer_class = TagSerializer
 
     def get_queryset(self):
-        queryset = Tag.objects.all()
+        queryset = Tag.objects.filter(status=0)
         return queryset
+
+
+class UserTagsListApi(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = TagSerializer
+    lookup_field = 'user'
+
+    def get_queryset(self):
+        username = self.kwargs.get(self.lookup_field)
+        tag_status = User.objects.values('pk').get(username=username)
+        tag_status = tag_status['pk']
+        user = Tag.objects.filter(status=tag_status)
+        return user
 
 
 """
@@ -114,7 +127,7 @@ class ColorListApi(generics.ListCreateAPIView):
     serializer_class = ColorSerializer
 
     def get_queryset(self):
-        queryset = Color.objects.all()
+        queryset = Color.objects.filter(status=0)
         return queryset
 
 """
@@ -143,17 +156,3 @@ class UserDeleteApi(generics.RetrieveDestroyAPIView):
         queryset = User.objects.all()
         return queryset
 
-"""
-UserSettings
-"""
-
-
-class UserSettingsListApi(generics.RetrieveUpdateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = SettingsSerializer
-    lookup_field = 'user'
-
-    def get_object(self):
-        username = self.kwargs.get(self.lookup_field)
-        user = UserSettings.objects.get(user__username=username)
-        return user

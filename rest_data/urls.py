@@ -14,7 +14,7 @@ notes_urls = [
 user_urls = [
     url(r'^$', views.UserApi.as_view()),
     url(r'^(?P<pk>\d+)/delete/$', views.UserDeleteApi.as_view()),
-    url(r'^(?P<user>\w+)/settings/$', views.UserSettingsListApi.as_view())
+    url(r'^(?P<user>\w+)/tags/$', views.UserTagsListApi.as_view())
 ]
 
 
