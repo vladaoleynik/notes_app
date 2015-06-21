@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block nav-main %}active{% endblock %}
+{% block content %}
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-warning"><h3>System categories:</h3></li>
+            {% for item in system %}
+            <li class="list-group-item list-group-item-warning">{{ item.category }}</li>
+            {% endfor %}
+        </ul>
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info"><h3>Custom categories:</h3></li>
+            {% for item in custom %}
+            <li class="list-group-item list-group-item-info">{{ item.category }}</li>
+            {% empty %}
+            <li class="list-group-item list-group-item-info">No custom categories yet.</li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="btn btn-success btn-md col-md-12" data-toggle="modal" data-target="#myModal">
+              Add new
+        </button>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Add new setting</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="setting" class="control-label">Enter value:</label>
+                                <input class="form-control" type="text" name="setting"/>
+                            </div>
+                            <div class="modal-footer">
+                                <input class="btn btn-success btn-md" type="submit" value="Send"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
