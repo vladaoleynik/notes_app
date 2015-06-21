@@ -176,3 +176,29 @@ def colors_choice(user):
         colors = [color['color'], color['color']]
         color_list.append(tuple(colors))
     return tuple(color_list)
+
+
+def tags_choice(user):
+    tag_list = []
+    custom = get_my_tags(user)
+    system = get_system_tags()
+    for tag in custom:
+        tags = [tag['tag'], tag['tag']]
+        tag_list.append(tuple(tags))
+    for tag in system:
+        tags = [tag['tag'], tag['tag']]
+        tag_list.append(tuple(tags))
+    return tuple(tag_list)
+
+
+def categories_choice(user):
+    category_list = []
+    custom = get_my_categories(user)
+    system = get_system_categories()
+    for category in custom:
+        categories = [category['category'], category['category']]
+        category_list.append(tuple(categories))
+    for category in system:
+        categories = [category['category'], category['category']]
+        category_list.append(tuple(categories))
+    return tuple(category_list)

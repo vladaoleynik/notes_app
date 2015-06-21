@@ -189,8 +189,15 @@ class CreateNoteView(mixins.NavigationMixin, FormView):
         custom = actions.get_my_colors(user)
         context['system'] = system
         context['custom'] = custom
-        context['color_choice'] = actions.colors_choice(user)
         return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        user = str(self.request.user)
+        kwargs = super(CreateNoteView, self).get_form_kwargs()
+        kwargs['color_choices'] = actions.colors_choice(user)
+        kwargs['tag_choices'] = actions.tags_choice(user)
+        kwargs['category_choices'] = actions.categories_choice(user)
+        return kwargs
 
     def form_valid(self, form):
         print 'fdg'

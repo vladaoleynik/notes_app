@@ -28,18 +28,25 @@ class NewNoteForm(forms.Form):
     text = forms.CharField(
         widget=forms.Textarea
     )
-    color = forms.ChoiceField()
-    """
-    favorite_colors = forms.MultipleChoiceField(
-        required=False,
-        widget=forms.CheckboxSelectMultiple,
-        choices=FAVORITE_COLORS_CHOICES
+    color = forms.ChoiceField(
+        widget=forms.Select,
+        choices=(('---', 'No colors available'),)
     )
-    favorite_colors = forms.MultipleChoiceField(
+    tag = forms.MultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=FAVORITE_COLORS_CHOICES
-    )"""
+        choices=(('---', 'No tags available'),)
+    )
+    category = forms.ChoiceField(
+        widget=forms.Select,
+        choices=(('---', 'No categories available'),)
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.declared_fields['color'].choices = kwargs.get('color_choices')
+        self.declared_fields['tag'].choices = kwargs.get('tag_choices')
+        self.declared_fields['category'].choices = kwargs.get('category_choices')
+        return super(NewNoteForm, self).__init__()
 
     def send_note(self, user, data):
         print data
