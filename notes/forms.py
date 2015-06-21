@@ -20,3 +20,26 @@ class ColorForm(forms.Form):
 
     def send_color(self, user, data):
         return actions.post_my_color(user, data)
+
+
+class NewNoteForm(forms.Form):
+
+    title = forms.CharField(max_length=40)
+    text = forms.CharField(
+        widget=forms.Textarea
+    )
+    color = forms.ChoiceField()
+    """
+    favorite_colors = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=FAVORITE_COLORS_CHOICES
+    )
+    favorite_colors = forms.MultipleChoiceField(
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=FAVORITE_COLORS_CHOICES
+    )"""
+
+    def send_note(self, user, data):
+        print data
