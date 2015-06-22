@@ -50,12 +50,14 @@ class NoteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.user = User.objects.get(username=self.initial_data.get('user'))
+        instance.title = validated_data['title']
+        instance.text = validated_data['text']
         instance.color = Color.objects.get(color=self.initial_data.get('color'))
         instance.category = Category.objects.get(category=self.initial_data.get('category'))
         instance.tag = [
             tag for tag in Tag.objects.filter(tag__in=self.initial_data.get('tag'))
         ]
-
+        instance.media = validated_data['media']
         instance.save()
 
         return instance
