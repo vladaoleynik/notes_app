@@ -203,7 +203,7 @@ def post_my_settings(user, clear_data, setting):
         setting: clear_data,
         "status": status
     }
-    return rest_post_data(url, clear_data, auth=AUTH)
+    return rest_post_data(url, data, auth=AUTH)
 
 """
 System Settings
