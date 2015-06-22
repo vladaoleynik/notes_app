@@ -92,6 +92,15 @@ def get_note(pk):
     url = BASE_URL + '/api/notes/' + pk
     return rest_get_data(url)
 
+
+# Post new custom tag or category
+def post_my_note(user, clear_data):
+    url = BASE_URL + '/api/notes/'
+    print user
+    clear_data['user'] = user
+    print clear_data
+    return rest_post_data(url, clear_data, auth=AUTH)
+
 """
 User Settings
 """

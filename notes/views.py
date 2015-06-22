@@ -179,7 +179,7 @@ class NoteView(mixins.NavigationMixin, TemplateView):
 class CreateNoteView(mixins.NavigationMixin, FormView):
     template_name = 'notes/new_note.html'
     form_class = NewNoteForm
-    url = reverse_lazy('new_note')
+    url = reverse_lazy('my_notes')
     success_url = url
 
     def get_context_data(self, **kwargs):
@@ -191,7 +191,7 @@ class CreateNoteView(mixins.NavigationMixin, FormView):
         context['custom'] = custom
         return context
 
-    def get_form_kwargs(self, *args, **kwargs):
+    def get_form_kwargs(self):
         user = str(self.request.user)
         kwargs = super(CreateNoteView, self).get_form_kwargs()
         kwargs['color_choices'] = actions.colors_choice(user)
@@ -200,6 +200,8 @@ class CreateNoteView(mixins.NavigationMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        print 'fdg'
+        media = self.request.FILES['media']
+        print media
+        form.cleaned_data['media'] = media
         self.object = form.send_note(str(self.request.user), form.cleaned_data)
         return super(CreateNoteView, self).form_valid(form)
