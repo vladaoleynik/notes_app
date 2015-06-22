@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.request',
+                'django.core.context_processors.static'
             ],
         },
     },
@@ -116,8 +117,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-STATIC_ROOT = 'var/www/booksnob/media/static/'
-MEDIA_ROOT = 'var/www/booksnob/media/'
+STATIC_ROOT = 'var/www/notes/static/'
+MEDIA_ROOT = 'var/www/notes/media/'
 
 
 STATICFILES_DIRS = (
