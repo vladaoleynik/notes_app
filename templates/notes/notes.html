@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% block nav-main %}active{% endblock %}
 {% block content %}
     <div>
         {% if info %}
@@ -21,6 +20,11 @@
                 </div>
                 <div class="panel-body">
                     <p>{{ note.text }}</p>
+                    {% if note.media %}
+                    <p>
+                        <a href="{{ MEDIA_URL }}{{ note.media }}">Attached file</a>
+                    </p>
+                    {% endif %}
                 </div>
                 <div class="panel-footer panel-default">
                     <p>
