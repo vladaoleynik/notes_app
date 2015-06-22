@@ -7,7 +7,6 @@
         </div>
         {% endif %}
     {% for note in notes %}
-        {% if user = note.user %}
         <figure>
             <div class="panel panel-default">
                 <div class="panel-heading" style="background-color: #{{ note.color }}!important; background-image: none;">
@@ -37,7 +36,6 @@
                 </div>
             </div>
         </figure>
-        {% endif %}
     {% empty %}
         <div class="alert alert-info" role="alert">
             <h2>No notes yet.</h2>

@@ -33,9 +33,9 @@
                     <div class="form-group">
                         <p class="col-sm-2 control-label">{{ form.color.label_tag }}</p>
                         <p class="col-sm-5">
-                            <select name="color" class="form-control">
-                                {% for value, choice in form.fields.color.choices %}
-                                    <option value="{{ value }}" style="background-color: #{{ choice }};">{{ choice }}</option>
+                            <select class="form-control" name="color">
+                                {% for value, text in form.fields.color.choices %}
+                                <option value="{{ value }}" style="background-color: #{{ value }}">{{ text }}</option>
                                 {% endfor %}
                             </select>
                         </p>

@@ -26,7 +26,7 @@ class IndexView(mixins.NavigationMixin, TemplateView):
 
 
 class MyNotesView(mixins.NavigationMixin, TemplateView):
-    template_name = 'notes/notes.html'
+    template_name = 'notes/my_notes.html'
 
     def get_context_data(self, **kwargs):
         context = super(MyNotesView, self).get_context_data(**kwargs)
