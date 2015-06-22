@@ -50,7 +50,4 @@ class NewNoteForm(forms.Form):
         self.declared_fields['color'].choices = kwargs.pop('color_choices')
         self.declared_fields['tag'].choices = kwargs.pop('tag_choices')
         self.declared_fields['category'].choices = kwargs.pop('category_choices')
-        super(NewNoteForm, self).__init__(**kwargs)
-
-    def send_note(self, user, data):
-        return actions.post_my_note(user, data)
+        super(NewNoteForm, self).__init__(*args, **kwargs)

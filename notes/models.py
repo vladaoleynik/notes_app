@@ -40,7 +40,7 @@ class Note(models.Model):
     user = models.ForeignKey(User)
     title = models.CharField(max_length=40)
     text = models.TextField()
-    media = models.FileField(blank=True, null=True)
+    media = models.CharField(max_length=200, blank=True, null=True)
     color = models.ForeignKey(Color)
     tag = models.ManyToManyField(Tag, blank=True)
     category = models.ForeignKey(Category)

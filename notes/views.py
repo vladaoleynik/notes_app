@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, FormView
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.conf import settings
+import os
+from datetime import datetime
 import actions
 import mixins
 from forms import SettingForm, ColorForm, NewNoteForm
@@ -17,6 +20,7 @@ class IndexView(mixins.NavigationMixin, TemplateView):
         notes = actions.get_notes_list()
         notes = actions.pagination(self.request, notes)
         context['notes'] = notes
+        context['MEDIA_URL'] = settings.MEDIA_URL
 
         return context
 
@@ -30,23 +34,9 @@ class MyNotesView(mixins.NavigationMixin, TemplateView):
         notes = actions.get_author_notes(str(self.request.user))
         notes = actions.pagination(self.request, notes)
         context['notes'] = notes
+        context['MEDIA_URL'] = settings.MEDIA_URL
 
         return context
-
-
-class MyCategoriesView(mixins.NavigationMixin, TemplateView):
-    template_name = 'notes/settings.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(MyCategoriesView, self).get_context_data(**kwargs)
-
-        settings = actions.get_my_settings(str(self.request.user))
-        context['settings'] = settings['category']
-        context['info'] = "No custom categories yet."
-        return context
-
-    def post(self, *args, **kwargs):
-        print kwargs
 
 
 class MyTagsView(mixins.NavigationMixin, FormView):
@@ -125,6 +115,7 @@ class NotesAuthorView(mixins.NavigationMixin, TemplateView):
 
         context['notes'] = notes
         context['info'] = info
+        context['MEDIA_URL'] = settings.MEDIA_URL
 
         return context
 
@@ -142,6 +133,7 @@ class NotesCategoryView(mixins.NavigationMixin, TemplateView):
 
         context['notes'] = notes
         context['info'] = info
+        context['MEDIA_URL'] = settings.MEDIA_URL
 
         return context
 
@@ -159,19 +151,7 @@ class NotesTagView(mixins.NavigationMixin, TemplateView):
 
         context['notes'] = notes
         context['info'] = info
-
-        return context
-
-
-class NoteView(mixins.NavigationMixin, TemplateView):
-    template_name = 'notes/single_note.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(NoteView, self).get_context_data(**kwargs)
-
-        pk = self.kwargs.get('pk')
-        note = actions.get_note(pk)
-        context['note'] = note
+        context['MEDIA_URL'] = settings.MEDIA_URL
 
         return context
 
@@ -201,7 +181,70 @@ class CreateNoteView(mixins.NavigationMixin, FormView):
 
     def form_valid(self, form):
         media = self.request.FILES['media']
-        print media
-        form.cleaned_data['media'] = media
-        self.object = form.send_note(str(self.request.user), form.cleaned_data)
+        path = 'uploaded/{0}_{1}'.format(
+            datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), media.name
+        )
+        form.cleaned_data['media'] = path
+        path = os.path.join('media/', path)
+        self._upload_file(path, media)
+
+        self.object = actions.post_my_note(str(self.request.user), form.cleaned_data)
         return super(CreateNoteView, self).form_valid(form)
+
+    def _upload_file(self, path, media):
+        with open(path, 'wb') as destination:
+            for chunk in media.chunks():
+                destination.write(chunk)
+
+
+class ChangeNoteView(mixins.NavigationMixin, FormView):
+    template_name = 'notes/change_note.html'
+    form_class = NewNoteForm
+
+    def get_context_data(self, **kwargs):
+        user = str(self.request.user)
+        context = super(ChangeNoteView, self).get_context_data(**kwargs)
+
+        system = actions.get_system_colors()
+        custom = actions.get_my_colors(user)
+        context['system'] = system
+        context['custom'] = custom
+
+        pk = self.kwargs.get('pk')
+        note = actions.get_note(pk)
+        context['note'] = note
+        context['MEDIA_URL'] = settings.MEDIA_URL
+
+        return context
+
+    def get_form_kwargs(self):
+        user = str(self.request.user)
+
+        kwargs = super(ChangeNoteView, self).get_form_kwargs()
+        kwargs['color_choices'] = actions.colors_choice(user)
+        kwargs['tag_choices'] = actions.tags_choice(user)
+        kwargs['category_choices'] = actions.categories_choice(user)
+
+        return kwargs
+
+    def form_valid(self, form):
+        try:
+            media = self.request.FILES['media']
+        except:
+            media = None
+        if media:
+            path = 'uploaded/{0}_{1}'.format(
+                datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), media.name
+            )
+            form.cleaned_data['media'] = path
+            path = os.path.join('media/', path)
+            self._upload_file(path, media)
+
+        note_id = self.kwargs.get('pk')
+        self.object = actions.put_my_note(str(self.request.user), note_id, form.cleaned_data)
+        return HttpResponseRedirect(self.request.path)
+
+    def _upload_file(self, path, media):
+        with open(path, 'wb') as destination:
+            for chunk in media.chunks():
+                destination.write(chunk)

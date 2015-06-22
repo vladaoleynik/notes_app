@@ -1,6 +1,7 @@
 __author__ = 'vladaoleynik'
 
 import requests
+import json
 from models import Note
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -53,6 +54,12 @@ def rest_post_data(url, clear_data, auth=None):
     return r
 
 
+# Handles PUT
+def rest_put_data(url, clear_data, auth=None):
+    r = requests.put(url=url, data=clear_data, auth=auth)
+    return r
+
+
 """
 Notes
 """
@@ -96,10 +103,20 @@ def get_note(pk):
 # Post new custom tag or category
 def post_my_note(user, clear_data):
     url = BASE_URL + '/api/notes/'
-    print user
     clear_data['user'] = user
-    print clear_data
     return rest_post_data(url, clear_data, auth=AUTH)
+
+
+def put_my_note(user, note_id, clear_data):
+    url = BASE_URL + '/api/notes/' + note_id
+    data = {
+        "user": user,
+        "pk": note_id
+    }
+    clear_data.update(data)
+    print clear_data
+    print json.dumps(clear_data)
+    return rest_put_data(url, json.dumps(clear_data), auth=AUTH)
 
 """
 User Settings
