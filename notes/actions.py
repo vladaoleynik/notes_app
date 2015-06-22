@@ -1,7 +1,10 @@
 __author__ = 'vladaoleynik'
 
 import requests
+import httplib
 import json
+from urlparse import urlparse
+from base64 import b64encode
 from models import Note
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -55,11 +58,22 @@ def rest_post_data(url, clear_data, auth=None):
 
 
 # Handles PUT
-def rest_put_data(url, clear_data, auth=None):
-    headers = {'Content-Type': 'application/json'}
-    r = requests.put(url=url, data=clear_data, auth=auth, headers=headers)
-    open('hfd.html', 'w').write(r._content)
-    return r
+# FIXME: requests.put not working correctly for some reason
+def rest_put_data(domain, url, clear_data, auth=None):
+    domain = domain.split(':')
+    print domain[0]
+    print domain[1]
+    print url
+    conn = httplib.HTTPConnection(domain[0], domain[1])
+    user_pass = b64encode('%s:%s' % auth).decode('ascii')
+    conn.request(
+        'PUT', url, json.dumps(clear_data),
+        headers={
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic %s' % user_pass
+        }
+    )
+    return conn.getresponse()
 
 
 # handles DELETE
@@ -125,13 +139,15 @@ def post_my_note(user, clear_data):
 
 
 def put_my_note(user, note_id, clear_data):
-    url = BASE_URL + '/api/notes/' + note_id
+    url = '/api/notes/' + note_id + '/'
+    domain = urlparse(BASE_URL)
+    domain = domain.netloc
     data = {
         "user": user,
         "pk": note_id,
     }
     clear_data.update(data)
-    return rest_put_data(url, clear_data, auth=AUTH)
+    return rest_put_data(domain, url, clear_data, auth=AUTH)
 
 
 def delete_my_note(user, note_id):
