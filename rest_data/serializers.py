@@ -1,6 +1,6 @@
 __author__ = 'vladaoleynik'
 
-from notes.models import Note, Tag, Category, Color, UserSettings
+from models import Note, Tag, Category, Color, UserSettings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 

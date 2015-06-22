@@ -1,5 +1,5 @@
 from django.contrib import admin
-from notes import models
+import models
 
 # Register your models here.
 admin.site.register(models.Tag)

@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_data.serializers import NoteSerializer, CategorySerializer, TagSerializer, \
     UserSerializer, ColorSerializer, SettingsSerializer
-from notes.models import Note, Category, Tag, Color, UserSettings
+from models import Note, Category, Tag, Color, UserSettings
 from django.contrib.auth.models import User
 from rest_framework import permissions
 import json

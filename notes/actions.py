@@ -4,8 +4,8 @@ import requests
 import httplib
 import json
 from urlparse import urlparse
+from rest_data.models import Note
 from base64 import b64encode
-from models import Note
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
