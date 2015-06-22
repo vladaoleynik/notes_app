@@ -4,7 +4,7 @@ from notes import views
 
 
 urlpatterns = [
-    url(r'^notes/$', views.IndexView.as_view(), name='index'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^profile/my_notes/$', views.MyNotesView.as_view(), name='my_notes'),
     url(r'^profile/my_categories/$', views.MyCategoriesView.as_view(), name='my_categories'),
     url(r'^profile/my_tags/$', views.MyTagsView.as_view(), name='my_tags'),
