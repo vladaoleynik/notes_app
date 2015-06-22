@@ -10,20 +10,30 @@
                 <div class="row">
                     <div class="form-group">
                         <p class="col-sm-2 control-label">{{ form.title.label_tag }}</p>
-                        <p class="col-sm-5">{{ form.title }}</p>
+                        <p class="col-sm-5">{{ form.title|add_class:"form-control" }}</p>
                         <p class="col-sm-5">
                             {% for err in form.title.errors %}
                                 <span class="text-danger">{{ err }}</span>
                             {% endfor %}
                         </p>
-
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <p class="col-sm-2 control-label">{{ form.text.label_tag }}</p>
+                        <p class="col-sm-5">{{ form.text|add_class:"form-control" }}</p>
+                        <p class="col-sm-5">
+                            {% for err in form.text.errors %}
+                                <span class="text-danger">{{ err }}</span>
+                            {% endfor %}
+                        </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group">
                         <p class="col-sm-2 control-label">{{ form.color.label_tag }}</p>
                         <p class="col-sm-5">
-                            <select name="color">
+                            <select name="color" class="form-control">
                                 {% for value, choice in form.fields.color.choices %}
                                     <option value="{{ value }}" style="background-color: #{{ choice }};">{{ choice }}</option>
                                 {% endfor %}
@@ -34,16 +44,21 @@
                                 <span class="text-danger">{{ err }}</span>
                             {% endfor %}
                         </p>
-
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group">
                         <p class="col-sm-2 control-label">{{ form.tag.label_tag }}</p>
-                        <p class="col-sm-5">
-                            {{ form.tag }}
-                        </p>
-                        <p class="col-sm-5">
+                        <div class="form-group">
+                            <div class="col-md-5">
+                                    {% for value, text in form.fields.tag.choices %}
+                                    <label for="{{ text }}">
+                                        <input id="{{ text }}" type="checkbox" value="{{ value }}" name="tag"> {{ text }}
+                                    </label>
+                                    {% endfor %}
+                            </div>
+                      </div>
+                        <p class="col-sm-5 ">
                             {% for err in form.tag.errors %}
                                 <span class="text-danger">{{ err }}</span>
                             {% endfor %}
@@ -55,7 +70,7 @@
                     <div class="form-group">
                         <p class="col-sm-2 control-label">{{ form.category.label_tag }}</p>
                         <p class="col-sm-5">
-                            {{ form.category }}
+                            {{ form.category|add_class:"form-control" }}
                         </p>
                         <p class="col-sm-5">
                             {% for err in form.category.errors %}
@@ -65,7 +80,21 @@
 
                     </div>
                 </div>
-            <input class="btn btn-success btn-md col-sm-12" type="submit" value="Send"/>
+                <div class="row">
+                    <div class="form-group">
+                        <p class="col-sm-2 control-label">{{ form.media.label_tag }}</p>
+                        <p class="col-sm-5">
+                            {{ form.media }}
+                        </p>
+                        <p class="col-sm-5">
+                            {% for err in form.media.errors %}
+                                <span class="text-danger">{{ err }}</span>
+                            {% endfor %}
+                        </p>
+
+                    </div>
+                </div>
+        <input class="btn btn-success btn-md col-sm-12" type="submit" value="Send"/>
         </form>
     </div>
 {% endblock %}
