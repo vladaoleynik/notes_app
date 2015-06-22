@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, View
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 import os
 from datetime import datetime
 import actions
@@ -17,7 +19,7 @@ class IndexView(mixins.NavigationMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
 
-        notes = actions.get_notes_list()
+        notes = actions.get_notes_exclude_user(str(self.request.user))
         notes = actions.pagination(self.request, notes)
         context['notes'] = notes
         context['MEDIA_URL'] = settings.MEDIA_URL
@@ -27,6 +29,10 @@ class IndexView(mixins.NavigationMixin, TemplateView):
 
 class MyNotesView(mixins.NavigationMixin, TemplateView):
     template_name = 'notes/my_notes.html'
+
+    @method_decorator(login_required(login_url=reverse_lazy('signin')))
+    def dispatch(self, request, *args, **kwargs):
+        return super(MyNotesView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(MyNotesView, self).get_context_data(**kwargs)
@@ -44,6 +50,10 @@ class MyTagsView(mixins.NavigationMixin, FormView):
     form_class = SettingForm
     url = reverse_lazy('my_tags')
     success_url = url
+
+    @method_decorator(login_required(login_url=reverse_lazy('signin')))
+    def dispatch(self, request, *args, **kwargs):
+        return super(MyTagsView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(MyTagsView, self).get_context_data(**kwargs)
@@ -66,6 +76,10 @@ class MyCategoriesView(mixins.NavigationMixin, FormView):
     url = reverse_lazy('my_categories')
     success_url = url
 
+    @method_decorator(login_required(login_url=reverse_lazy('signin')))
+    def dispatch(self, request, *args, **kwargs):
+        return super(MyCategoriesView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(MyCategoriesView, self).get_context_data(**kwargs)
         system = actions.get_system_categories()
@@ -86,6 +100,10 @@ class MyColorsView(mixins.NavigationMixin, FormView):
     form_class = ColorForm
     url = reverse_lazy('my_colors')
     success_url = url
+
+    @method_decorator(login_required(login_url=reverse_lazy('signin')))
+    def dispatch(self, request, *args, **kwargs):
+        return super(MyColorsView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(MyColorsView, self).get_context_data(**kwargs)
@@ -185,7 +203,7 @@ class CreateNoteView(mixins.NavigationMixin, FormView):
             datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), media.name
         )
         form.cleaned_data['media'] = path
-        path = os.path.join('media/', path)
+        path = os.path.join(settings.MEDIA_ROOT, path)
         self._upload_file(path, media)
 
         self.object = actions.post_my_note(str(self.request.user), form.cleaned_data)
@@ -237,7 +255,7 @@ class ChangeNoteView(mixins.NavigationMixin, FormView):
                 datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), media.name
             )
             form.cleaned_data['media'] = path
-            path = os.path.join('media/', path)
+            path = os.path.join(settings.MEDIA_ROOT, path)
             self._upload_file(path, media)
 
         note_id = self.kwargs.get('pk')
@@ -248,3 +266,13 @@ class ChangeNoteView(mixins.NavigationMixin, FormView):
         with open(path, 'wb') as destination:
             for chunk in media.chunks():
                 destination.write(chunk)
+
+
+class DeleteNoteView(View):
+
+    def get(self, request, *args, **kwargs):
+        note_id = self.kwargs.get('pk')
+        actions.delete_my_note(str(self.request.user), note_id)
+
+        url = reverse_lazy('my_notes')
+        return HttpResponseRedirect(url)

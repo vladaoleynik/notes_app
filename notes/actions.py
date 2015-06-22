@@ -56,8 +56,19 @@ def rest_post_data(url, clear_data, auth=None):
 
 # Handles PUT
 def rest_put_data(url, clear_data, auth=None):
-    r = requests.put(url=url, data=clear_data, auth=auth)
+    headers = {'Content-Type': 'application/json'}
+    r = requests.put(url=url, data=clear_data, auth=auth, headers=headers)
+    open('hfd.html', 'w').write(r._content)
     return r
+
+
+# handles DELETE
+def rest_delete_data(url, user, auth=None):
+    data = rest_get_data(url, auth)
+    if data['user'] == user:
+        r = requests.delete(url=url, auth=auth)
+        return r
+    return
 
 
 """
@@ -74,6 +85,12 @@ def get_notes_count(user):
 def get_notes_list():
     url = BASE_URL + '/api/notes/'
     return rest_get_data_list(url)
+
+
+def get_notes_exclude_user(user):
+    url = BASE_URL + '/api/notes/'
+    data = rest_get_data_list(url)
+    return [note for note in data if user != note['user']]
 
 
 # Notes by author
@@ -111,12 +128,16 @@ def put_my_note(user, note_id, clear_data):
     url = BASE_URL + '/api/notes/' + note_id
     data = {
         "user": user,
-        "pk": note_id
+        "pk": note_id,
     }
     clear_data.update(data)
-    print clear_data
-    print json.dumps(clear_data)
-    return rest_put_data(url, json.dumps(clear_data), auth=AUTH)
+    return rest_put_data(url, clear_data, auth=AUTH)
+
+
+def delete_my_note(user, note_id):
+    url = BASE_URL + '/api/notes/' + note_id
+    return rest_delete_data(url, user, auth=AUTH)
+
 
 """
 User Settings
@@ -166,7 +187,7 @@ def post_my_settings(user, clear_data, setting):
         setting: clear_data,
         "status": status
     }
-    return rest_post_data(url, data, auth=AUTH)
+    return rest_post_data(url, clear_data, auth=AUTH)
 
 """
 System Settings

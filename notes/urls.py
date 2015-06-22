@@ -11,7 +11,8 @@ urlpatterns = [
     url(r'^profile/my_colors/$', views.MyColorsView.as_view(), name='my_colors'),
     url(r'^new_note/$', views.CreateNoteView.as_view(), name='new_note'),
     url(r'^note/(?P<pk>\d+)/$', views.ChangeNoteView.as_view(), name='single_note'),
+    url(r'^note/(?P<pk>\d+)/delete/$', views.DeleteNoteView.as_view(), name='delete_note'),
     url(r'^author/(?P<username>\w+)/$', views.NotesAuthorView.as_view(), name='notes_author'),
     url(r'^notes/category/(?P<category>\w+)/$', views.NotesCategoryView.as_view(), name='notes_category'),
-    url(r'^notes/tag/(?P<tag>\w+)/$', views.NotesTagView.as_view(), name='notes_tag'),
+    url(r'^notes/tag/(?P<tag>\w+)/$', views.NotesTagView.as_view(), name='notes_tag')
 ]
