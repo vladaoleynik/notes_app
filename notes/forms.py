@@ -29,7 +29,7 @@ class NewNoteForm(forms.Form):
         widget=forms.Textarea
     )
     color = forms.ChoiceField(
-        widget=forms.Select,
+        widget=forms.RadioSelect,
         choices=(('---', 'No colors available'),)
     )
     tag = forms.MultipleChoiceField(
