@@ -198,13 +198,18 @@ class CreateNoteView(mixins.NavigationMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        media = self.request.FILES['media']
-        path = 'uploaded/{0}_{1}'.format(
-            datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), media.name
-        )
-        form.cleaned_data['media'] = path
-        path = os.path.join(settings.MEDIA_ROOT, path)
-        self._upload_file(path, media)
+        try:
+            media = self.request.FILES['media']
+        except:
+            media = None
+        if media:
+            media = self.request.FILES['media']
+            path = 'uploaded/{0}_{1}'.format(
+                datetime.now().strftime('%Y-%m-%d_%H-%M-%S'), media.name
+            )
+            form.cleaned_data['media'] = path
+            path = os.path.join(settings.MEDIA_ROOT, path)
+            self._upload_file(path, media)
 
         self.object = actions.post_my_note(str(self.request.user), form.cleaned_data)
         return super(CreateNoteView, self).form_valid(form)
