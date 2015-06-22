@@ -115,6 +115,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = 'var/www/booksnob/media/static/'
+MEDIA_ROOT = 'var/www/booksnob/media/'
+
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "media"),
+)
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
