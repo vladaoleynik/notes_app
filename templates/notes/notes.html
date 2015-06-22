@@ -7,14 +7,14 @@
         </div>
         {% endif %}
     {% for note in notes %}
-        {% if user = note.user %}
+        {% if user != note.user %}
         <figure>
             <div class="panel panel-default">
                 <div class="panel-heading" style="background-color: #{{ note.color }}!important; background-image: none;">
                     <div class="page-header" style="margin: 0; padding: 0; border: 0;">
                         <h3>
-                            <a href="{% url 'notes_category' note.category|lower %}" style="color: #080808; text-decoration: none; font-weight: bold">{{ note.category }}:</a>
-                            <a href="{% url 'single_note' note.pk %}" style="color:#000000; text-decoration: none;">{{ note.title }}</a>
+                            <a href="{% url 'notes_category' note.category|lower %}" style="color: #000000; text-decoration: none; font-weight: bold">{{ note.category }}:</a>
+                            <span style="color: #000000;">{{ note.title }}</span>
                             <a {% ifnotequal user note.user %}href="{% url 'notes_author' note.user %}"{% endifnotequal %} style="text-decoration: none;"><small style="color: #222222;">{{ note.user }}</small></a>
                         </h3>
                     </div>

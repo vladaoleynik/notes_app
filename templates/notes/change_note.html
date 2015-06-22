@@ -92,7 +92,9 @@
                     <div class="form-group">
                         <p class="col-sm-2 control-label">{{ form.media.label_tag }}</p>
                         <p class="col-sm-5">
-                            {{ form.media }}
+                            {% if note.media %}
+                        <a href="{{ MEDIA_URL }}{{ note.media }}">Attached file</a>
+                    {% endif %}{{ form.media }}
                         </p>
                         <p class="col-sm-5">
                             {% for err in form.media.errors %}
@@ -102,7 +104,8 @@
 
                     </div>
                 </div>
-        <input class="btn btn-success btn-md col-sm-12" type="submit" value="Send"/>
+        <a href="{% url 'my_notes' %}" class="btn btn-primary btn-md col-sm-4" >Back</a>
+        <input class="btn btn-success btn-md col-sm-8" type="submit" value="Send"/>
         </form>
     </div>
 {% endblock %}
