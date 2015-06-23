@@ -1,111 +1,88 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 {% block content %}
-    <div class="alert alert-info" role="alert">
-        <h2>Change note</h2>
-    </div>
+    <h2 class="text-info">Change note:</h2><br/>
     <div>
         <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-
-                <div class="row">
-                    <div class="form-group">
-                        <p class="col-sm-2 control-label">{{ form.title.label_tag }}</p>
-                        <p class="col-sm-5">
-                            <input type="text" name="title" value="{{ note.title }}" class="form-control" maxlength=40/>
-                        </p>
-                        <p class="col-sm-5">
-                            {% for err in form.title.errors %}
-                                <span class="text-danger">{{ err }}</span>
-                            {% endfor %}
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <p class="col-sm-2 control-label">{{ form.text.label_tag }}</p>
-                        <p class="col-sm-5">
-                            <textarea class="form-control" cols="40" id="id_text" name="text" rows="10">{{ note.text }}</textarea>
-                        </p>
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                <input type="text" name="title" value="{{ note.title }}" class="form-control" maxlength=40/>
+                <p>
+                    {% for err in form.title.errors %}
+                        <span class="text-danger">{{ err }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="form-group">
+                {{ form.text.label_tag }}
+                <textarea class="form-control" cols="40" id="id_text" name="text" rows="10">{{ note.text }}</textarea>
                         <p class="col-sm-5">
                             {% for err in form.text.errors %}
                                 <span class="text-danger">{{ err }}</span>
                             {% endfor %}
                         </p>
-                    </div>
+            </div>
+            <div class="form-group">
+                {{ form.color.label_tag }}
+                <select name="color" class="form-control">
+                    {% for value, choice in form.fields.color.choices %}
+                        <option value="{{ value }}" {% ifequal value note.color %}selected{% endifequal %} style="background-color: #{{ choice }};">{{ choice }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    {% for err in form.color.errors %}
+                        <span class="text-danger">{{ err }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="form-group">
+                {{ form.tag.label_tag }}
+                <div class="form-group">
+                    {% for value, text in form.fields.tag.choices %}
+                        <label for="{{ text }}">
+                            <input id="{{ text }}" type="checkbox" {% if value in note.tag %}checked{% endif %} value="{{ value }}" name="tag"> {{ text }}
+                        </label>
+                    {% endfor %}
                 </div>
-                <div class="row">
-                    <div class="form-group">
-                        <p class="col-sm-2 control-label">{{ form.color.label_tag }}</p>
-                        <p class="col-sm-5">
-                            <select name="color" class="form-control">
-                                {% for value, choice in form.fields.color.choices %}
-                                    <option value="{{ value }}" {% ifequal value note.color %}selected{% endifequal %} style="background-color: #{{ choice }};">{{ choice }}</option>
-                                {% endfor %}
-                            </select>
-                        </p>
-                        <p class="col-sm-5">
-                            {% for err in form.color.errors %}
-                                <span class="text-danger">{{ err }}</span>
-                            {% endfor %}
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <p class="col-sm-2 control-label">{{ form.tag.label_tag }}</p>
-                        <div class="form-group">
-                            <div class="col-md-5">
-                                    {% for value, text in form.fields.tag.choices %}
-                                    <label for="{{ text }}">
-                                        <input id="{{ text }}" type="checkbox" {% if value in note.tag %}checked{% endif %} value="{{ value }}" name="tag"> {{ text }}
-                                    </label>
-                                    {% endfor %}
-                            </div>
-                      </div>
-                        <p class="col-sm-5 ">
-                            {% for err in form.tag.errors %}
-                                <span class="text-danger">{{ err }}</span>
-                            {% endfor %}
-                        </p>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <p class="col-sm-2 control-label">{{ form.category.label_tag }}</p>
-                        <p class="col-sm-5">
-                            <select name="category" class="form-control">
-                                {% for value, choice in form.fields.category.choices %}
-                                    <option value="{{ value }}" {% ifequal value note.category %}selected{% endifequal %}>{{ choice }}</option>
-                                {% endfor %}
-                            </select>
-                        </p>
-                        <p class="col-sm-5">
-                            {% for err in form.category.errors %}
-                                <span class="text-danger">{{ err }}</span>
-                            {% endfor %}
-                        </p>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group">
-                        <p class="col-sm-2 control-label">{{ form.media.label_tag }}</p>
-                        <p class="col-sm-5">
-                            {% if note.media %}
-                        <a href="{{ MEDIA_URL }}{{ note.media }}">Attached file</a>
-                    {% endif %}{{ form.media }}
-                        </p>
-                        <p class="col-sm-5">
-                            {% for err in form.media.errors %}
-                                <span class="text-danger">{{ err }}</span>
-                            {% endfor %}
-                        </p>
-
-                    </div>
-                </div>
-        <a href="{% url 'my_notes' %}" class="btn btn-primary btn-md col-sm-4" >Back</a>
-        <input class="btn btn-success btn-md col-sm-8" type="submit" value="Send"/>
+                <p>
+                    {% for err in form.tag.errors %}
+                        <span class="text-danger">{{ err }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="form-group">
+                {{ form.category.label_tag }}
+                <select name="category" class="form-control">
+                    {% for value, choice in form.fields.category.choices %}
+                        <option value="{{ value }}" {% ifequal value note.category %}selected{% endifequal %}>{{ choice }}</option>
+                    {% endfor %}
+                </select>
+                <p>
+                    {% for err in form.category.errors %}
+                        <span class="text-danger">{{ err }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="form-group">
+                {{ form.media.label_tag }}
+                {% if note.media %}
+                    <a href="{{ MEDIA_URL }}{{ note.media }}">Attached file</a>
+                {% endif %}
+                {{ form.media }}
+                <p>
+                    {% for err in form.media.errors %}
+                        <span class="text-danger">{{ err }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+            <a href="{% url 'my_notes' %}" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Edit
+            </button>
         </form>
+        <br/>
+        <br/>
     </div>
 {% endblock %}

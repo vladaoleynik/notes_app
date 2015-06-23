@@ -2,48 +2,42 @@
 {% block content %}
     <div>
         {% if info %}
-        <div class="alert alert-info" role="alert">
-            <h2>{{ info }}</h2>
-        </div>
+        <h2 class="text-info">{{ info }}</h2><br/>
         {% endif %}
     {% for note in notes %}
-        <figure>
-            <div class="panel panel-default">
-                <div class="panel-heading" style="background-color: #{{ note.color }}!important; background-image: none;">
-                    <div class="page-header" style="margin: 0; padding: 0; border: 0;">
-                        <p>
+        <figure class="panel panel-default note">
+            <div class="panel-heading" style="background-color: #{{ note.color }}!important;">
+                <div class="page-header">
+                    <h3>
+                        <strong>{{ note.title }}</strong>
+                        <a href="{% url 'notes_category' note.category|lower %}"><small>{{ note.category }}</small></a>
+                        <p class="pull-right">
                             <a href="{% url 'single_note' note.pk %}" class="btn btn-default"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
                             <a href="{% url 'delete_note' note.pk %}" class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                         </p>
-                        <h3>
-                            <a href="{% url 'notes_category' note.category|lower %}" style="color: #080808; text-decoration: none; font-weight: bold">{{ note.category }}:</a>
-                            <a style="color:#000000; text-decoration: none;">{{ note.title }}</a>
-                            <a style="text-decoration: none;"><small style="color: #222222;">{{ note.user }}</small></a>
-                        </h3>
-                    </div>
+                    </h3>
+                    <p>Posted by: {{ note.user }}</p>
                 </div>
-                <div class="panel-body">
-                    <p>{{ note.text }}</p>
-                    {% if note.media %}
-                    <p>
-                        <a href="{{ MEDIA_URL }}{{ note.media }}">Attached file</a>
-                    </p>
-                    {% endif %}
-                </div>
-                <div class="panel-footer panel-default">
-                    <p>
-                        {% for tag in note.tag %}
-                        <a href="{% url 'notes_tag' tag|lower %}">{{ tag }}</a>
-                        {% ifnotequal tag note.tag|last %},{% endifnotequal %}
-                        {% endfor %}
-                    </p>
-                </div>
+            </div>
+            <div class="panel-body">
+                <p>{{ note.text }}</p>
+                {% if note.media %}<p>
+                    <a href="{{ MEDIA_URL }}{{ note.media }}">Attached file</a>
+                </p>
+                {% endif %}
+            </div>
+            <div class="panel-footer panel-default">
+                <p>
+                    {% for tag in note.tag %}
+                        <a href="{% url 'notes_tag' tag|lower %}" class="btn btn-default">
+                            <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> {{ tag }}
+                        </a>
+                    {% endfor %}
+                </p>
             </div>
         </figure>
     {% empty %}
-        <div class="alert alert-info" role="alert">
-            <h2>No notes yet.</h2>
-        </div>
+        <h2 class="text-info">No notes yet.</h2><br/>
     {% endfor %}
     </div>
     {% if notes %}

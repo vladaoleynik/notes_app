@@ -1,0 +1,20 @@
+.page-header h1>a:hover{
+    text-decoration: none;
+}
+
+.panel.note a,
+.panel.note p,
+.panel.note h3,
+.panel.note small{
+    color: #000000!important;
+}
+
+.panel.note .panel-heading{
+    background-image: none;
+}
+
+.panel.note .page-header{
+    margin: 0;
+    padding: 0;
+    border: 0;
+}

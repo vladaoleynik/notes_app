@@ -2,21 +2,18 @@
 {% block content %}
     <div>
         {% if info %}
-        <div class="alert alert-info" role="alert">
-            <h2>{{ info }}</h2>
-        </div>
+        <h2 class="text-info">{{ info }}</h2><br/>
         {% endif %}
     {% for note in notes %}
         {% if user != note.user %}
-        <figure>
-            <div class="panel panel-default">
-                <div class="panel-heading" style="background-color: #{{ note.color }}!important; background-image: none;">
-                    <div class="page-header" style="margin: 0; padding: 0; border: 0;">
+        <figure class="panel panel-default note">
+                <div class="panel-heading" style="background-color: #{{ note.color }}!important;">
+                    <div class="page-header">
                         <h3>
-                            <a href="{% url 'notes_category' note.category|lower %}" style="color: #000000; text-decoration: none; font-weight: bold">{{ note.category }}:</a>
-                            <span style="color: #000000;">{{ note.title }}</span>
-                            <a {% ifnotequal user note.user %}href="{% url 'notes_author' note.user %}"{% endifnotequal %} style="text-decoration: none;"><small style="color: #222222;">{{ note.user }}</small></a>
+                            <strong>{{ note.title }}</strong>
+                            <a href="{% url 'notes_category' note.category|lower %}"><small>{{ note.category }}</small></a>
                         </h3>
+                        <p>Posted by: <a href="{% url 'notes_author' note.user %}">{{ note.user }}</a></p>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -30,18 +27,16 @@
                 <div class="panel-footer panel-default">
                     <p>
                         {% for tag in note.tag %}
-                        <a href="{% url 'notes_tag' tag|lower %}">{{ tag }}</a>
-                        {% ifnotequal tag note.tag|last %},{% endifnotequal %}
+                        <a href="{% url 'notes_tag' tag|lower %}" class="btn btn-default">
+                            <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> {{ tag }}
+                        </a>
                         {% endfor %}
                     </p>
                 </div>
-            </div>
         </figure>
         {% endif %}
     {% empty %}
-        <div class="alert alert-info" role="alert">
-            <h2>No notes yet.</h2>
-        </div>
+        <h2 class="text-info">No notes yet.</h2><br/>
     {% endfor %}
     </div>
     {% if notes %}
